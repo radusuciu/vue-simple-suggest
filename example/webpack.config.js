@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 var HtmlWebPackPlugin = require('html-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
-var VueLoaderPlugin = require('vue-loader/lib/plugin')
+var { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   entry: ['whatwg-fetch/fetch.js', 'core-js/es/promise', path.resolve(__dirname, './src/main.js')],
@@ -11,13 +11,20 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'vue-style-loader',
+          'style-loader',
           'css-loader'
         ],
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        options: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2
+            }
+          }
+        }
       },
       {
         test: /\.js$/,
@@ -44,7 +51,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      'vue': '@vue/compat',
       'vue-simple-suggest': path.resolve(__dirname, '../')
     },
     extensions: ['*', '.js', '.vue', '.json']
